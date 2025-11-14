@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Love Letter</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Press Start 2P', monospace;
+    background: black;
+}
+
+#sunset-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg,
+        #ffb3c6,
+        #ff7ea8,
+        #ff5b84,
+        #ff4081,
+        #330018);
+    background-size: 400% 400%;
+    animation: sunset 20s ease infinite;
+    z-index: -3;
+}
+@keyframes sunset {
+    0% { background-position: 50% 0%; }
+    50% { background-position: 50% 100%; }
+    100% { background-position: 50% 0%; }
+}
+
+#landscape {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 200px;
+    background: url('https://i.imgur.com/7FQv5gq.png');
+    background-size: cover;
+    image-rendering: pixelated;
+    z-index: -2;
+    opacity: 0.9;
+}
+
+.particle, .heart { position: fixed; z-index: -1; }
+.particle {
+    width: 4px; height: 4px;
+    background: white;
+    opacity: 0.7;
+    border-radius: 50%;
+    animation: drift 8s linear infinite;
+    filter: blur(1px);
+}
+@keyframes drift {
+    from { transform: translateY(100vh); }
+    to   { transform: translateY(-10vh); }
+}
+.heart {
+    color: #ff99c9;
+    font-size: 20px;
+    animation: floatUp 6s ease-in infinite;
+    opacity: 0.8;
+}
+@keyframes floatUp {
+    0% { transform: translateY(20vh) scale(1); opacity: 1; }
+    100% { transform: translateY(-60vh) scale(1.4); opacity: 0; }
+}
+
+#start-screen {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
+    color: white; text-align: center; padding: 20px; z-index: 5;
+}
+#start-title { font-size: 20px; margin-bottom: 25px; }
+#start-hint { font-size: 12px; animation: blink 1s step-start infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+#dialogue-box {
+    position: absolute;
+    bottom: 60px; left: 50%;
+    transform: translateX(-50%);
+    width: 88%;
+    background: rgba(0,0,0,0.55);
+    border: 4px solid white;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.8;
+}
+#text { white-space: pre-wrap; }
+
+#mute-btn {
+    position: fixed; top: 15px; right: 15px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.3);
+    border: 3px solid white;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+    z-index: 10;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+}
+#mute-btn:active { transform: scale(0.95); }
+</style>
+</head>
+<body>
+
+<div id="sunset-bg"></div>
+<div id="landscape"></div>
+
+<script>
+let particles = (window.innerWidth < 600) ? 20 : 40;
+for (let i = 0; i < particles; i++) {
+    let p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.animationDelay = Math.random()*8 + "s";
+    document.body.appendChild(p);
+}
+let hearts = (window.innerWidth < 600) ? 12 : 20;
+for (let i = 0; i < hearts; i++) {
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDelay = Math.random()*6 + "s";
+    document.body.appendChild(h);
+}
+</script>
+
+<div id="start-screen">
+    <div id="start-title">Digital Love Letter</div>
+    <div id="start-hint">(Tap to Start)</div>
+</div>
+
+<div id="dialogue-box" style="display:none;">
+    <div id="text"></div>
+</div>
+
+<button id="mute-btn" style="display:none;">MUTE</button>
+
+<iframe id="music" 
+src="https://www.youtube.com/embed/NdYWuo9OFAw?autoplay=1&loop=1&playlist=NdYWuo9OFAw&mute=1"
+allow="autoplay" style="display:none;"></iframe>
+
+<script>
+const pages = [
+`Hi, think of this as a digital love letter from me to you.
+
+I don't know what things you've been thinking about me lately but now I wanted to tell you what I feel instead of just sending out songs to you.`,
+
+`Some people say that love is blind, or that love is unrequited, but one thing I believe absolutely is that love finds you.
+
+It’s not a word you get to say every day, like "hi" or "hello," and it’s certainly not one you use lightly.`,
+
+`I know this is love because it makes me feel happy. It makes me feel completely and overwhelmingly hopeful.
+
+It’s when I wake up in the morning and genuinely thank God that you still exist in this world.`,
+
+`I know it’s you when I listen to the soft notes of "Iris" and I see only your face.
+
+It’s when I close my eyes and just wish, desperately, that we were close to each other.
+
+It’s the feeling of utter completeness that washes over me simply by thinking of you.
+
+It’s the strange, beautiful fact that it feels like every song I hear calls out your name.`,
+
+`Babe, all of this — the joy, the hope, the music — are just some of what I feel about you.
+
+So much of it is unexplainable, still waiting for the time when I can show and say even more.`,
+
+`Some promises in life are fragile and can be broken, but this is the one promise I know will never falter, never break:
+
+I will keep on loving you.`,
+
+`I will love you from afar, and I will love you when I am close to you.
+
+I love you to the moon and back.`
+];
+
+let page = 0;
+let charIndex = 0;
+const textBox = document.getElementById("text");
+
+function startLetter() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("dialogue-box").style.display = "block";
+    document.getElementById("mute-btn").style.display = "block";
+    let music = document.getElementById("music");
+    music.src = music.src.replace("&mute=1", "&mute=0");
+}
+
+document.getElementById("start-screen").addEventListener("click", startLetter);
+
+function startTyping() {
+    if (charIndex < pages[page].length) {
+        textBox.innerHTML += pages[page].charAt(charIndex);
+        charIndex++;
+        setTimeout(startTyping, (window.innerWidth < 600 ? 18 : 25));
+    }
+}
+
+document.addEventListener("click", nextPage);
+function nextPage() {
+    if (charIndex >= pages[page].length) {
+        if (page < pages.length - 1) {
+            page++;
+            charIndex = 0;
+            textBox.innerHTML = "";
+            startTyping();
+        }
+    }
+}
+
+const muteBtn = document.getElementById("mute-btn");
+muteBtn.addEventListener("click", () => {
+    let music = document.getElementById("music");
+    if (muteBtn.innerHTML === "MUTE") {
+        music.src = music.src.replace("&mute=0", "&mute=1");
+        muteBtn.innerHTML = "UNMUTE";
+    } else {
+        music.src = music.src.replace("&mute=1", "&mute=0");
+        muteBtn.innerHTML = "MUTE";
+    }
+});
+</script>
+
+</body>
+</html>
