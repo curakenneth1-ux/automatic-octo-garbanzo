@@ -2,68 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digital Love Letter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>From me, to you.</title>
+
+<!-- Game-style pixel font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 html, body {
     margin: 0;
+    padding: 0;
     height: 100%;
     overflow: hidden;
     font-family: 'Press Start 2P', monospace;
-    background: black;
 }
 
-#sunset-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(180deg,
-        #ffb3c6,
-        #ff7ea8,
-        #ff5b84,
-        #ff4081,
-        #330018);
-    background-size: 400% 400%;
-    animation: sunset 20s ease infinite;
-    z-index: -3;
-}
-@keyframes sunset {
-    0% { background-position: 50% 0%; }
-    50% { background-position: 50% 100%; }
-    100% { background-position: 50% 0%; }
-}
-
-#landscape {
-    position: fixed;
-    bottom: 0;
+/* Pixelated pink sunset background */
+#background {
+    position: absolute;
     width: 100%;
-    height: 200px;
-    background: url('https://i.imgur.com/7FQv5gq.png');
-    background-size: cover;
+    height: 100%;
+    background: linear-gradient(180deg, #ffb3c6 0%, #ff7ea8 40%, #ff5b84 70%, #ff4081 100%);
     image-rendering: pixelated;
-    z-index: -2;
-    opacity: 0.9;
 }
 
-.particle, .heart { position: fixed; z-index: -1; }
-.particle {
-    width: 4px; height: 4px;
+/* Pixel stars */
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
     background: white;
-    opacity: 0.7;
     border-radius: 50%;
-    animation: drift 8s linear infinite;
-    filter: blur(1px);
+    animation: twinkle 3s infinite alternate;
 }
-@keyframes drift {
-    from { transform: translateY(100vh); }
-    to   { transform: translateY(-10vh); }
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
 }
+
+/* Floating hearts */
 .heart {
+    position: fixed;
     color: #ff99c9;
-    font-size: 20px;
+    font-size: 18px;
     animation: floatUp 6s ease-in infinite;
     opacity: 0.8;
 }
@@ -72,42 +53,50 @@ html, body {
     100% { transform: translateY(-60vh) scale(1.4); opacity: 0; }
 }
 
-#start-screen {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: black;
-    display: flex; justify-content: center; align-items: center; flex-direction: column;
-    color: white; text-align: center; padding: 20px; z-index: 5;
-}
-#start-title { font-size: 20px; margin-bottom: 25px; }
-#start-hint { font-size: 12px; animation: blink 1s step-start infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-
+/* Dialogue box */
 #dialogue-box {
     position: absolute;
-    bottom: 60px; left: 50%;
+    bottom: 5%;
+    left: 50%;
     transform: translateX(-50%);
-    width: 88%;
-    background: rgba(0,0,0,0.55);
-    border: 4px solid white;
-    border-radius: 12px;
-    padding: 20px;
-    color: white;
-    font-size: 14px;
-    line-height: 1.8;
-}
-#text { white-space: pre-wrap; }
-
-#mute-btn {
-    position: fixed; top: 15px; right: 15px;
-    padding: 10px 15px;
-    background: rgba(255,255,255,0.3);
+    width: 90%;
+    max-height: 60%;
+    background: rgba(0,0,0,0.7);
     border: 3px solid white;
-    border-radius: 10px;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+/* Pixel character */
+#character {
+    position: absolute;
+    bottom: 15%;
+    width: 40px;
+    height: 40px;
+    background: url('https://i.ibb.co/5F4Vfzr/pixel-character.png') no-repeat center center;
+    background-size: cover;
+    left: -50px; /* start off-screen */
+    animation: walk 20s linear infinite;
+}
+@keyframes walk {
+    0% { left: -50px; }
+    100% { left: 110%; }
+}
+
+/* Mute button */
+#mute-btn {
+    position: fixed; top: 10px; right: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.3);
+    border: 2px solid white;
+    border-radius: 8px;
     color: white;
     font-family: 'Press Start 2P';
-    font-size: 10px;
-    z-index: 10;
+    font-size: 9px;
     cursor: pointer;
     backdrop-filter: blur(6px);
 }
@@ -116,45 +105,21 @@ html, body {
 </head>
 <body>
 
-<div id="sunset-bg"></div>
-<div id="landscape"></div>
+<div id="background"></div>
 
-<script>
-let particles = (window.innerWidth < 600) ? 20 : 40;
-for (let i = 0; i < particles; i++) {
-    let p = document.createElement("div");
-    p.className = "particle";
-    p.style.left = Math.random()*100 + "vw";
-    p.style.animationDelay = Math.random()*8 + "s";
-    document.body.appendChild(p);
-}
-let hearts = (window.innerWidth < 600) ? 12 : 20;
-for (let i = 0; i < hearts; i++) {
-    let h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "❤";
-    h.style.left = Math.random()*100 + "vw";
-    h.style.animationDelay = Math.random()*6 + "s";
-    document.body.appendChild(h);
-}
-</script>
+<div id="character"></div>
 
-<div id="start-screen">
-    <div id="start-title">Digital Love Letter</div>
-    <div id="start-hint">(Tap to Start)</div>
-</div>
-
-<div id="dialogue-box" style="display:none;">
+<div id="dialogue-box">
     <div id="text"></div>
 </div>
 
-<button id="mute-btn" style="display:none;">MUTE</button>
+<button id="mute-btn">MUTE</button>
 
-<iframe id="music" 
-src="https://www.youtube.com/embed/NdYWuo9OFAw?autoplay=1&loop=1&playlist=NdYWuo9OFAw&mute=1"
-allow="autoplay" style="display:none;"></iframe>
+<!-- Background music -->
+<iframe id="music" src="https://www.youtube.com/embed/NdYWuo9OFAw?autoplay=1&loop=1&playlist=NdYWuo9OFAw&mute=0" allow="autoplay" style="display:none;"></iframe>
 
 <script>
+// Love letter content
 const pages = [
 `Hi, think of this as a digital love letter from me to you.
 
@@ -193,16 +158,7 @@ let page = 0;
 let charIndex = 0;
 const textBox = document.getElementById("text");
 
-function startLetter() {
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("dialogue-box").style.display = "block";
-    document.getElementById("mute-btn").style.display = "block";
-    let music = document.getElementById("music");
-    music.src = music.src.replace("&mute=1", "&mute=0");
-}
-
-document.getElementById("start-screen").addEventListener("click", startLetter);
-
+// Typing effect
 function startTyping() {
     if (charIndex < pages[page].length) {
         textBox.innerHTML += pages[page].charAt(charIndex);
@@ -211,8 +167,8 @@ function startTyping() {
     }
 }
 
-document.addEventListener("click", nextPage);
-function nextPage() {
+// Advance page on tap
+document.addEventListener("click", () => {
     if (charIndex >= pages[page].length) {
         if (page < pages.length - 1) {
             page++;
@@ -221,11 +177,14 @@ function nextPage() {
             startTyping();
         }
     }
-}
+});
 
+startTyping();
+
+// Mute button
 const muteBtn = document.getElementById("mute-btn");
 muteBtn.addEventListener("click", () => {
-    let music = document.getElementById("music");
+    const music = document.getElementById("music");
     if (muteBtn.innerHTML === "MUTE") {
         music.src = music.src.replace("&mute=0", "&mute=1");
         muteBtn.innerHTML = "UNMUTE";
@@ -234,6 +193,28 @@ muteBtn.addEventListener("click", () => {
         muteBtn.innerHTML = "MUTE";
     }
 });
+
+// Generate stars
+let starsCount = (window.innerWidth < 600 ? 50 : 100);
+for (let i = 0; i < starsCount; i++) {
+    let star = document.createElement("div");
+    star.className = "star";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(star);
+}
+
+// Generate floating hearts
+let heartsCount = (window.innerWidth < 600 ? 10 : 20);
+for (let i = 0; i < heartsCount; i++) {
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDelay = Math.random() * 6 + "s";
+    document.body.appendChild(h);
+}
 </script>
 
 </body>
