@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Love Letter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* Body with sunset image background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            background: url('https://images.unsplash.com/photo-1501973801540-537f08ccae7d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Overlay container */
+        .letter-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.55); /* Dark transparent overlay */
+            border-radius: 20px;
+            padding: 30px 20px;
+            max-width: 90%;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* Paragraph styling */
+        .letter-container p {
+            font-size: 1.4em;
+            line-height: 1.9em;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        /* Staggered animation delays */
+        .letter-container p:nth-child(1) { animation-delay: 0.5s; }
+        .letter-container p:nth-child(2) { animation-delay: 1.5s; }
+        .letter-container p:nth-child(3) { animation-delay: 2.5s; }
+        .letter-container p:nth-child(4) { animation-delay: 3.5s; }
+        .letter-container p:nth-child(5) { animation-delay: 4.5s; }
+        .letter-container p:nth-child(6) { animation-delay: 5.5s; }
+        .letter-container p:nth-child(7) { animation-delay: 6.5s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Hearts animation */
+        .heart {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 0, 100, 0.8);
+            transform: rotate(-45deg);
+            bottom: -30px;
+            z-index: 1;
+            animation: floatUp linear infinite;
+            border-radius: 3px;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 0, 100, 0.8);
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -7px; left: 0; }
+        .heart::after { left: 7px; top: 0; }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(calc(-25px + 50px * var(--random))) translateY(-100vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive typography */
+        @media (max-width: 768px) {
+            .letter-container p {
+                font-size: 1.2em;
+                line-height: 1.6em;
+            }
+            .heart {
+                width: 12px;
+                height: 12px;
+            }
+            .heart::before, .heart::after {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .letter-container p {
+                font-size: 1em;
+                line-height: 1.4em;
+            }
+            .heart {
+                width: 10px;
+                height: 10px;
+            }
+            .heart::before, .heart::after {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Letter Container -->
+    <div class="letter-container">
+        <p>Hi, think of this as a digital love letter from me to you.<br>
+        I don't know what things you've been thinking about me lately but now I wanted to tell you what I feel instead of just sending out songs to you.</p>
+
+        <p>Some people say that love is blind, or that love is unrequited, but one thing I believe absolutely is that love finds you.<br>
+        It’s not a word you get to say every day, like "hi" or "hello," and it’s certainly not one you use lightly.</p>
+
+        <p>I know this is love because it makes me feel happy. It makes me feel completely and overwhelmingly hopeful.<br>
+        It’s when I wake up in the morning and genuinely thank God that you still exist in this world.</p>
+
+        <p>I know it’s you when I listen to the soft notes of "Iris" and I see only your face.<br>
+        It’s when I close my eyes and just wish, desperately, that we were close to each other.<br>
+        It’s the feeling of utter completeness that washes over me simply by thinking of you.<br>
+        It’s the strange, beautiful fact that it feels like every song I hear calls out your name.</p>
+
+        <p>Babe, all of this — the joy, the hope, the music — are just some of what I feel about you.<br>
+        So much of it is unexplainable, still waiting for the time when I can show and say even more.</p>
+
+        <p>Some promises in life are fragile and can be broken, but this is the one promise I know will never falter, never break:<br>
+        I will keep on loving you.</p>
+
+        <p>I will love you from afar, and I will love you when I am close to you.<br>
+        I love you to the moon and back.</p>
+    </div>
+
+    <!-- Floating Hearts -->
+    <script>
+        const colors = ['rgba(255, 0, 100, 0.8)', 'rgba(255, 102, 178,0.7)', 'rgba(255,51,153,0.9)'];
+        const heartCount = window.innerWidth < 480 ? 15 : window.innerWidth < 768 ? 20 : 30;
+
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            const size = 10 + Math.random() * 20;
+            heart.style.width = heart.style.height = size + 'px';
+            heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.setProperty('--random', Math.random());
+            heart.style.animationDuration = (4 + Math.random() * 5) + 's';
+            document.body.appendChild(heart);
+        }
+    </script>
+
+</body>
+</html>
